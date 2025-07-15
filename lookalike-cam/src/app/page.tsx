@@ -4,6 +4,7 @@ import { loadModels, getFaceEmbedding } from '../utils/faceUtils';
 import cartoonEmbeddingsData from '../lib/cartoonEmbeddings.json';
 import { CartoonCharacter } from '../lib/types';
 import NextImage from 'next/image';
+import UploadForm from "@/components/UploadForm";
 
 const cartoonEmbeddings = cartoonEmbeddingsData as CartoonCharacter[];
 
@@ -36,11 +37,12 @@ export default function Home() {
     const imgURL = URL.createObjectURL(file);
     setPreview(imgURL);
 
-    const img = new window.Image();
-    img.src = imgURL;
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      setImageElement(img); // store for later use on submit
+    const img = new Image();
+  img.src = imgURL;
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    console.log("Image loaded and ready");
+    setImageElement(img); // store for later use on submit
     };
   };
 
@@ -60,6 +62,7 @@ export default function Home() {
       const sim = cosineSimilarity(userEmbedding, new Float32Array(cartoon.embedding));
       if (sim > best.sim) best = { sim, character: cartoon };
     }
+    console.log("imageElement:", imageElement);
 
     setMatch(best.character);
   };
@@ -67,13 +70,7 @@ export default function Home() {
   return (
     <main className="flex flex-col items-center p-6">
       <h1 className="text-3xl font-bold mb-4">FaceToon</h1>
-      <input
-        ref={fileRef}
-        type="file"
-        accept="image/*"
-        onChange={handleUpload}
-        style={{ border: '1px solid white', color: 'white' }}
-      />
+      <UploadForm />
       {preview && (
         <NextImage
           src={preview}
