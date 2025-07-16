@@ -2,11 +2,57 @@
   {
     "name": "SpongeBob",
     "image": "/cartoon_characters/spongebob.jpg",
-    "embedding": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]
+    "embedding": [0.2, 0.4, 0.6, 0.8, 0.1, 0.3]
   },
   {
     "name": "Elsa",
     "image": "/cartoon_characters/elsa.jpg",
-    "embedding": [0.3, 0.1, 0.7, 0.4, 0.2, 0.6]
+    "embedding": [0.4, 0.2, 0.8, 0.6, 0.3, 0.1]
+  },
+  {
+    "name": "doraemon",
+    "image": "/cartoon_characters/doraemon.jpg",
+    "embedding": [0.6, 0.8, 0.4, 0.2, 0.1, 0.3]
+  },
+  {
+    "name": "luffy",
+    "image": "/cartoon_characters/luffy.jpg",
+    "embedding": [0.8, 0.6, 0.4, 0.2, 0.1, 0.3]
+  },
+  {
+    "name": "Moana",
+    "image": "/cartoon_characters/moana.jpg",
+    "embedding": [0.2, 0.8, 0.6, 0.4, 0.1, 0.3]
+  },
+  {
+    "name": "pic2",
+    "image": "/cartoon_characters/pic2.jpg",
+    "embedding": [0.4, 0.2, 0.6, 0.8, 0.1, 0.3]
+  },
+  {
+    "name": "pic3",
+    "image": "/cartoon_characters/pic3.jpg",
+    "embedding": [0.6, 0.4, 0.2, 0.8, 0.1, 0.3]
+  },
+  {
+    "name": "p1",
+    "image": "/cartoon_characters/p1.jpg",
+    "embedding": [0.2, 0.4, 0.6, 0.8, 0.1, 0.3]
+  },
+  {
+    "name": "pic3",
+    "image": "/cartoon_characters/p2.jpg",
+    "embedding": [0.6, 0.4, 0.2, 0.8, 0.1, 0.3]
+  },
+  {
+    "name": "pic2",
+    "image": "/cartoon_characters/p3.jpg",
+    "embedding": [0.4, 0.2, 0.6, 0.8, 0.1, 0.3]
+  },
+  {
+    "name": "pic3",
+    "image": "/cartoon_characters/p4.jpg",
+    "embedding": [0.8, 0.6, 0.4, 0.2, 0.1, 0.3]
   }
 ]
+
