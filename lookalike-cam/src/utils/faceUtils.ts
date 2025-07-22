@@ -1,13 +1,14 @@
 import * as faceapi from 'face-api.js';
 
-export const loadModels = async () => {
-  // Optionally remove the first three lines; they're redundant
+export const loadModels = async (api: typeof faceapi) => {
+  const MODEL_URL = '/models';
   await Promise.all([
-    faceapi.nets.ssdMobilenetv1.loadFromUri('/models/ssd_mobilenetv1'),
-    faceapi.nets.faceRecognitionNet.loadFromUri('/models/face_recognition'),
-    faceapi.nets.faceLandmark68Net.loadFromUri('/models/face_landmark_68')
+    api.nets.ssdMobilenetv1.loadFromUri(MODEL_URL),
+    api.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+    api.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
   ]);
 };
+
 
 export const getFaceEmbedding = async (image: HTMLImageElement): Promise<Float32Array | null> => {
   const detection = await faceapi

@@ -24,7 +24,12 @@ export default function Home() {
 
   useEffect(() => {
     const load = async () => {
-      await loadModels();
+/*************  ✨ Windsurf Command ⭐  *************/
+    /**
+     * Loads face recognition models and sets modelsLoaded state to true when done
+     */
+/*******  c4e9ede7-be48-4e3e-a16a-322e97c4c77f  *******/      const faceapi = await import('face-api.js'); // lazy-load to avoid fs issues
+      await loadModels(faceapi); // pass faceapi to custom util
       setModelsLoaded(true);
     };
     load();
@@ -38,11 +43,11 @@ export default function Home() {
     setPreview(imgURL);
 
     const img = new Image();
-  img.src = imgURL;
-  img.crossOrigin = 'anonymous';
-  img.onload = () => {
-    console.log("Image loaded and ready");
-    setImageElement(img); // store for later use on submit
+    img.src = imgURL;
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      console.log("Image loaded and ready");
+      setImageElement(img);
     };
   };
 
@@ -62,7 +67,6 @@ export default function Home() {
       const sim = cosineSimilarity(userEmbedding, new Float32Array(cartoon.embedding));
       if (sim > best.sim) best = { sim, character: cartoon };
     }
-    console.log("imageElement:", imageElement);
 
     setMatch(best.character);
   };
