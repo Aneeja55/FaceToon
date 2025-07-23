@@ -1,6 +1,6 @@
 // pages/api/match.ts
 import type { NextApiRequest, NextApiResponse } from 'next'
-import formidable from 'formidable'
+import formidable, { IncomingForm } from 'formidable'
 import fs from 'fs'
 import path from 'path'
 import * as faceapi from 'face-api.js'
@@ -8,11 +8,11 @@ import { Canvas, Image, ImageData, loadImage } from 'canvas'
 
 // 1️⃣ Patch face-api.js for Node + canvas
 faceapi.env.monkeyPatch({
-  Canvas: Canvas as any,
-  Image: Image as any,
-  ImageData: ImageData as any,
-  createCanvasElement: () => new Canvas(1, 1) as any,
-  createImageElement: () => new Image() as any
+  Canvas: Canvas as unknown as typeof HTMLCanvasElement,
+  Image: Image as unknown as typeof HTMLImageElement,
+  ImageData: ImageData as unknown as typeof globalThis.ImageData,
+  createCanvasElement: () => new Canvas(1, 1) as unknown as HTMLCanvasElement,
+  createImageElement: () => new Image() as unknown as HTMLImageElement
 })
 
 // 2️⃣ Disable bodyParser so we can use formidable
@@ -50,10 +50,10 @@ export default async function handler(
     return res.status(405).json({ error: 'Only POST allowed' })
 
   // parse multipart with formidable
-  const form = new formidable.IncomingForm()
+  const form = new IncomingForm()
   form.parse(req, async (err, fields, files) => {
     if (err) return res.status(500).json({ error: 'Upload failed' })
-    const file = files.file as formidable.File
+    const file = files.file as formidable.File | undefined
     if (!file || Array.isArray(file))
       return res.status(400).json({ error: 'No file uploaded' })
 
@@ -66,9 +66,9 @@ export default async function handler(
     ctx.drawImage(img, 0, 0)
 
     const detection = await faceapi
-      .detectSingleFace(c as any)
+      .detectSingleFace(c as unknown as faceapi.TNetInput)
       .withFaceLandmarks()
-      .withFaceDescriptor()
+      .withFaceDescriptor();
 
     if (!detection)
       return res.status(400).json({ error: 'No face detected' })
