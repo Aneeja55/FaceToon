@@ -88,7 +88,7 @@ export default async function handler(
       const dist = cosineDistance(uploadedDescriptor, desc)
       if (dist < bestDist) {
         bestDist = dist
-        bestName = name
+        bestName = nam
       }
     }
 
