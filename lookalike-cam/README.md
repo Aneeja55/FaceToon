@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FaceToon Lookalike Cam
 
-## Getting Started
+A web app that lets you upload or take a photo and finds the most similar cartoon character from a static set, using face recognition in the browser. Inspired by the "lookalike cam" at NBA/football games!
 
-First, run the development server:
+## Features
+- Upload a photo or take one with your camera
+- Finds the closest cartoon character from your static set
+- All face processing is done in your browser (privacy-friendly)
+- No images are uploaded to any server
+- Modern, mobile-friendly UI (Next.js + Tailwind CSS)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Demo
+Host it yourself or deploy to Vercel (see below).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Getting Started (Local)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clone the repo:**
+   ```sh
+   git clone <your-repo-url>
+   cd lookalike-cam
+   ```
+2. **Install dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Download face-api.js models:**
+   - Place the required models in `public/models/` (see [face-api.js model downloads](https://github.com/justadudewhohacks/face-api.js#models)).
+4. **Add cartoon images:**
+   - Place your cartoon images in `public/cartoon_characters/`.
+5. **Run the app:**
+   ```sh
+   npm run dev
+   ```
+6. Open [http://localhost:3000](http://localhost:3000)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deploy to Vercel
+1. **Push your code to GitHub.**
+2. **Go to [vercel.com](https://vercel.com/), sign up, and import your repo.**
+3. **Deploy!** Vercel will auto-detect Next.js.
+4. **After deploy:**
+   - Make sure `public/models/` and `public/cartoon_characters/` are included in your repo.
+   - If you add new images/models, push to GitHub and Vercel will redeploy.
 
-## Learn More
+## License
+MIT License. See [LICENSE](./LICENSE).
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Made with ❤️ using Next.js, face-api.js, and Tailwind CSS.**
