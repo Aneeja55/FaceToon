@@ -2,8 +2,21 @@
 
 import { useState } from "react"
 
-// Import face-api.js dynamically to avoid SSR issues
 const FACE_API_MODELS = "/models";
+const STATIC_CARTOONS = [
+  "/cartoon_characters/elsa.jpeg",
+  "/cartoon_characters/luffy.jpg",
+  "/cartoon_characters/moana.jpg",
+  "/cartoon_characters/pikachu.jpeg",
+  "/cartoon_characters/spongebob.jpeg",
+  "/cartoon_characters/doraemon.jpg",
+  "/cartoon_characters/p1.jpg",
+  "/cartoon_characters/p2.jpg",
+  "/cartoon_characters/p3.jpg",
+  "/cartoon_characters/p4.jpg",
+  "/cartoon_characters/pic2.jpg",
+  "/cartoon_characters/pic3.jpg"
+];
 
 async function loadFaceApi() {
   const faceapi = await import("face-api.js");
@@ -15,14 +28,27 @@ async function loadFaceApi() {
   return faceapi;
 }
 
-// Fetch cartoon images from DuckDuckGo (demo, not for production)
-async function fetchCartoonImages(query = "cartoon character", count = 8) {
-  // Use DuckDuckGo unofficial API via a public proxy (for demo)
-  const url = `/api/cartoon-search?q=${encodeURIComponent(query)}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  // Return only images with a valid URL
-  return data.results.slice(0, count).map((img: any) => img.image);
+async function fetchCartoonImages(count = 12): Promise<string[]> {
+  const queries = [
+    "cartoon face",
+    "cartoon character face",
+    "animated character face",
+    "anime face",
+    "disney character face"
+  ];
+  let images: string[] = [];
+  for (const q of queries) {
+    try {
+      const url = `/api/cartoon-search?q=${encodeURIComponent(q)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.results && Array.isArray(data.results)) {
+        images = images.concat(data.results);
+      }
+      if (images.length >= count) break;
+    } catch {}
+  }
+  return images.slice(0, count);
 }
 
 export default function UploadForm() {
@@ -52,14 +78,11 @@ export default function UploadForm() {
     setCartoonImages([]);
 
     try {
-      // 1. Load face-api.js and models
       const faceapi = await loadFaceApi();
-
-      // 2. Fetch cartoon images
-      const cartoonUrls = await fetchCartoonImages();
+      // 1. Fetch cartoon images from API
+      let cartoonUrls = await fetchCartoonImages();
       setCartoonImages(cartoonUrls);
-
-      // 3. Compute embedding for uploaded photo
+      // 2. Compute embedding for uploaded photo
       const userImg = await new Promise<HTMLImageElement>((resolve, reject) => {
         const img = new window.Image();
         img.src = URL.createObjectURL(file);
@@ -72,10 +95,10 @@ export default function UploadForm() {
         .withFaceDescriptor();
       if (!userDetection) throw new Error("No face detected in uploaded photo.");
       const userEmbedding = userDetection.descriptor;
-
-      // 4. For each cartoon image, compute embedding and compare
+      // 3. For each cartoon image, compute embedding and compare
       let bestMatch = null;
       let bestDist = Infinity;
+      let foundFace = false;
       for (const cartoonUrl of cartoonUrls) {
         try {
           const cartoonImg = await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -90,8 +113,8 @@ export default function UploadForm() {
             .withFaceLandmarks()
             .withFaceDescriptor();
           if (!cartoonDetection) continue;
+          foundFace = true;
           const cartoonEmbedding = cartoonDetection.descriptor;
-          // Cosine distance
           let dot = 0, magA = 0, magB = 0;
           for (let i = 0; i < userEmbedding.length; i++) {
             dot += userEmbedding[i] * cartoonEmbedding[i];
@@ -103,11 +126,40 @@ export default function UploadForm() {
             bestDist = dist;
             bestMatch = cartoonUrl;
           }
-        } catch (e) {
-          // Ignore errors for individual images
-        }
+        } catch {}
       }
-      if (!bestMatch) throw new Error("No cartoon face detected in any image.");
+      // 4. Fallback to static images if no faces found in API images
+      if (!foundFace) {
+        setCartoonImages(STATIC_CARTOONS);
+        for (const cartoonUrl of STATIC_CARTOONS) {
+          try {
+            const cartoonImg = await new Promise<HTMLImageElement>((resolve, reject) => {
+              const img = new window.Image();
+              img.src = cartoonUrl;
+              img.onload = () => resolve(img);
+              img.onerror = reject;
+            });
+            const cartoonDetection = await faceapi
+              .detectSingleFace(cartoonImg)
+              .withFaceLandmarks()
+              .withFaceDescriptor();
+            if (!cartoonDetection) continue;
+            const cartoonEmbedding = cartoonDetection.descriptor;
+            let dot = 0, magA = 0, magB = 0;
+            for (let i = 0; i < userEmbedding.length; i++) {
+              dot += userEmbedding[i] * cartoonEmbedding[i];
+              magA += userEmbedding[i] * userEmbedding[i];
+              magB += cartoonEmbedding[i] * cartoonEmbedding[i];
+            }
+            const dist = 1 - dot / (Math.sqrt(magA) * Math.sqrt(magB));
+            if (dist < bestDist) {
+              bestDist = dist;
+              bestMatch = cartoonUrl;
+            }
+          } catch {}
+        }
+        if (!bestMatch) throw new Error("No cartoon face detected in any image (even fallback). Try a different photo.");
+      }
       setMatched(bestMatch);
     } catch (e: any) {
       setError(e.message || "Matching failed");
