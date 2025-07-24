@@ -152,6 +152,7 @@ export default function UploadForm() {
       // 3. For each static cartoon image, compute embedding and compare
       let bestMatch = null;
       let bestDist = Infinity;
+      let bestName = null;
       for (const cartoonUrl of staticCartoons) {
         try {
           const cartoonImg = await new Promise<HTMLImageElement>((resolve, reject) => {
@@ -176,12 +177,13 @@ export default function UploadForm() {
           if (dist < bestDist) {
             bestDist = dist;
             bestMatch = cartoonUrl;
+            bestName = getFilenameFromUrl(cartoonUrl);
           }
         } catch {}
       }
       if (!bestMatch) throw new Error("No cartoon face detected in any image. Try a different photo.");
       setMatched(bestMatch);
-      setMatchedName(getFilenameFromUrl(bestMatch));
+      setMatchedName(bestName);
     } catch (e: any) {
       setError(e.message || "Matching failed");
     } finally {
