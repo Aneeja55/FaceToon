@@ -184,8 +184,8 @@ export default function UploadForm() {
       if (!bestMatch) throw new Error("No cartoon face detected in any image. Try a different photo.");
       setMatched(bestMatch);
       setMatchedName(bestName);
-    } catch (e: any) {
-      setError(e.message || "Matching failed");
+    } catch (e) {
+      setError((e as Error).message || "Matching failed");
     } finally {
       setLoading(false);
     }
