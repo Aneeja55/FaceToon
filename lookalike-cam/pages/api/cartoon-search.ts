@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Parse Wikimedia response
     const images: string[] = [];
     if (data.query && data.query.pages) {
-      for (const page of Object.values(data.query.pages) as any[]) {
+      for (const page of Object.values(data.query.pages) as { imageinfo?: { url?: string }[] }[]) {
         if (page.imageinfo && page.imageinfo[0] && page.imageinfo[0].url) {
           images.push(page.imageinfo[0].url);
         }
