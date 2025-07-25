@@ -16,7 +16,7 @@ Host it yourself or deploy to Vercel (see below).
 
 1. **Clone the repo:**
    ```sh
-   git clone <your-repo-url>
+   git clone https://github.com/Aneeja55/FaceToon.git
    cd lookalike-cam
    ```
 2. **Install dependencies:**
