@@ -1,6 +1,6 @@
 # FaceToon Lookalike Cam
 
-A web app that lets you upload or take a photo and finds the most similar cartoon character from a static set, using face recognition in the browser. Inspired by the "lookalike cam" at NBA/football games!
+FaceToon Lookalike Cam is a fun AI-powered web app that finds which cartoon character looks most like you. Upload or capture a photo, and our app matches it with the closest character using face recognition — all in your browser!
 
 ## Features
 - Upload a photo or take one with your camera
@@ -10,7 +10,7 @@ A web app that lets you upload or take a photo and finds the most similar cartoo
 - Modern, mobile-friendly UI (Next.js + Tailwind CSS)
 
 ## Demo
-Host it yourself or deploy to Vercel (see below).
+[**Live Demo on Vercel**](https://lookalike-1x0j396qx-aneeja55s-projects.vercel.app)
 
 ## Getting Started (Local)
 
@@ -31,7 +31,7 @@ Host it yourself or deploy to Vercel (see below).
    ```sh
    npm run dev
    ```
-6. Open [http://localhost:3000](https://lookalike-1x0j396qx-aneeja55s-projects.vercel.app)
+6. Open [http://localhost:3000](http://localhost:3000)
 
 ## Deploy to Vercel
 1. **Push your code to GitHub.**
