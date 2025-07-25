@@ -31,7 +31,7 @@ Host it yourself or deploy to Vercel (see below).
    ```sh
    npm run dev
    ```
-6. Open [http://localhost:3000](http://localhost:3000)
+6. Open [http://localhost:3000](https://lookalike-1x0j396qx-aneeja55s-projects.vercel.app)
 
 ## Deploy to Vercel
 1. **Push your code to GitHub.**
