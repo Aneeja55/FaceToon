@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
+import Image from "next/image";
 
 const FACE_API_MODELS = "/models";
 
@@ -34,7 +35,6 @@ export default function UploadForm() {
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
-  const [cameraActive, setCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -62,8 +62,7 @@ export default function UploadForm() {
         try {
           const stream = await navigator.mediaDevices.getUserMedia({ video: true });
           videoRef.current.srcObject = stream;
-          setCameraActive(true);
-        } catch (err) {
+        } catch {
           setError("Unable to access camera.");
           setShowCamera(false);
         }
@@ -79,7 +78,6 @@ export default function UploadForm() {
       videoRef.current.srcObject = null;
     }
     setShowCamera(false);
-    setCameraActive(false);
   };
 
   // Handle take photo
@@ -113,7 +111,6 @@ export default function UploadForm() {
     setError(null);
     setPreview(null);
     setShowCamera(false);
-    setCameraActive(false);
     if (videoRef.current && videoRef.current.srcObject) {
       const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
       tracks.forEach(track => track.stop());
@@ -253,7 +250,7 @@ export default function UploadForm() {
       )}
       {preview && !showCamera && (
         <div className="flex flex-col items-center gap-2">
-          <img src={preview} alt="Preview" className="w-40 h-40 object-cover rounded-lg border border-indigo-200 shadow" />
+          <Image src={preview} alt="Preview" width={160} height={160} className="w-40 h-40 object-cover rounded-lg border border-indigo-200 shadow" unoptimized />
           <span className="text-xs text-gray-500">Preview</span>
         </div>
       )}
@@ -277,10 +274,13 @@ export default function UploadForm() {
       {matched && (
         <div className="flex flex-col items-center mt-6 gap-2">
           <p className="text-lg font-semibold text-indigo-700 mb-2">You look like:</p>
-          <img
+          <Image
             src={matched}
             alt="Matched Cartoon"
+            width={192}
+            height={192}
             className="w-48 h-48 object-cover rounded-lg border-4 border-indigo-400 shadow-lg"
+            unoptimized
           />
           {matchedName && (
             <span className="mt-2 text-indigo-800 font-bold text-lg">{matchedName}</span>
